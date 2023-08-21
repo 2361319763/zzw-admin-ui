@@ -3,16 +3,16 @@
     <template v-if="hasOneShowingChild(item.children, item) && (!onlyOneChild.children || onlyOneChild.noShowingChildren) && !item.alwaysShow">
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path, onlyOneChild.query)">
         <el-menu-item :index="resolvePath(onlyOneChild.path)">
-          <svg-icon :name="onlyOneChild.meta.icon || (item.meta && item.meta.icon)"/>
-          <template #title><span :title="hasTitle(onlyOneChild.meta.title)">{{ onlyOneChild.meta.title }}</span></template>
+          <svg-icon style="margin-right: 10px;" :icon-class="onlyOneChild.meta.icon || (item.meta && item.meta.icon)"/>
+          <template #title><span class="menu-title" :title="hasTitle(onlyOneChild.meta.title)">{{ onlyOneChild.meta.title }}</span></template>
         </el-menu-item>
       </app-link>
     </template>
 
     <el-sub-menu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
       <template v-if="item.meta" #title>
-        <svg-icon :name="item.meta && item.meta.icon" />
-        <span :title="hasTitle(item.meta.title)">{{ item.meta.title }}</span>
+        <svg-icon style="margin-right: 10px;" :icon-class="item.meta && item.meta.icon" />
+        <span class="menu-title" :class="{'none-text':themeConfig.isCollapse}" :title="hasTitle(item.meta.title)">{{ item.meta.title }}</span>
       </template>
 
       <SubItem
@@ -21,6 +21,7 @@
         :is-nest="true"
         :item="child"
         :base-path="resolvePath(child.path)"
+        class="nest-menu"
       />
     </el-sub-menu>
   </div>
@@ -30,7 +31,11 @@
 import { isExternal } from '/@/utils/validate'
 import AppLink from './Link.vue'
 import { getNormalPath } from '/@/utils/ruoyi'
+import { useThemeConfig } from '/@/stores/themeConfig'
 import { ref } from "vue"
+
+const storesThemeConfig = useThemeConfig();
+const { themeConfig } = storeToRefs(storesThemeConfig);
 
 const props = defineProps({
   // route object
@@ -47,9 +52,10 @@ const props = defineProps({
     default: ''
   }
 })
-
 const onlyOneChild = ref({});
-
+onMounted(() => {
+  console.log(props.item, onlyOneChild.value.children);
+})
 function hasOneShowingChild(children = [], parent) {
   if (!children) {
     children = [];
@@ -100,3 +106,13 @@ function hasTitle(title){
   }
 }
 </script>
+
+
+<style lang="scss">
+.none-text {
+  display: none;
+}
+.nest-menu .none-text {
+  display: inline-block !important;
+}
+</style>

@@ -30,15 +30,6 @@ const SubItem = defineAsyncComponent(() => import('/@/layout/navMenu/subItem.vue
 const permissionStore = usePermissionStore();
 const sidebarRouters =  computed(() => permissionStore.sidebarRouters);
 
-// 定义父组件传过来的值
-// const props = defineProps({
-// 	// 菜单列表
-// 	menuList: {
-// 		type: Array<RouteRecordRaw>,
-// 		default: () => [],
-// 	},
-// });
-
 // 定义变量内容
 const storesThemeConfig = useThemeConfig();
 const { themeConfig } = storeToRefs(storesThemeConfig);
@@ -49,10 +40,6 @@ const state = reactive({
 	isCollapse: false,
 });
 
-// 获取父级菜单数据
-// const menuLists = computed(() => {
-// 	return <RouteItems>props.menuList;
-// });
 // 获取布局配置信息
 const getThemeConfig = computed(() => {
 	return themeConfig.value;
@@ -61,7 +48,7 @@ const getThemeConfig = computed(() => {
 const setParentHighlight = (currentRoute: RouteToFrom) => {
 	const { path, meta } = currentRoute;
 	const pathSplit = meta?.isDynamic ? meta.isDynamicPath!.split('/') : path!.split('/');
-	if (pathSplit.length >= 4 && meta?.isHide) return pathSplit.splice(0, 3).join('/');
+	if (pathSplit.length >= 4 && meta?.hide) return pathSplit.splice(0, 3).join('/');
 	else return path;
 };
 // 打开外部链接

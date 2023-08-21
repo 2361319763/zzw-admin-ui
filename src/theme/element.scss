@@ -79,6 +79,11 @@
 	height: 56px !important;
 	line-height: 56px !important;
 }
+.el-menu-item, .menu-title {
+	overflow: hidden !important;
+	text-overflow: ellipsis !important;
+	white-space: nowrap !important;
+}
 .el-menu-item,
 .el-sub-menu__title {
 	color: var(--next-bg-menuBarColor);

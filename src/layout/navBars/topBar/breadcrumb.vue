@@ -1,21 +1,16 @@
 <template>
 	<div v-if="isShowBreadcrumb" class="layout-navbars-breadcrumb">
-		<SvgIcon
-			class="layout-navbars-breadcrumb-icon"
-			:name="themeConfig.isCollapse ? 'ele-Expand' : 'ele-Fold'"
-			:size="16"
-			@click="onThemeConfigChange"
-		/>
+		<hamburger />
 		<el-breadcrumb class="layout-navbars-breadcrumb-hide">
 			<transition-group name="breadcrumb">
 				<el-breadcrumb-item v-for="(v, k) in state.breadcrumbList" :key="!v.meta.tagsViewName ? v.meta.title : v.meta.tagsViewName">
 					<span v-if="k === state.breadcrumbList.length - 1" class="layout-navbars-breadcrumb-span">
-						<SvgIcon :name="v.meta.icon" class="layout-navbars-breadcrumb-iconfont" v-if="themeConfig.isBreadcrumbIcon" />
+						<SvgIcon :icon-class="v.meta.icon" class="layout-navbars-breadcrumb-iconfont" v-if="themeConfig.isBreadcrumbIcon" />
 						<div v-if="!v.meta.tagsViewName">{{ $t(v.meta.title) }}</div>
 						<div v-else>{{ v.meta.tagsViewName }}</div>
 					</span>
 					<a v-else @click.prevent="onBreadcrumbClick(v)">
-						<SvgIcon :name="v.meta.icon" class="layout-navbars-breadcrumb-iconfont" v-if="themeConfig.isBreadcrumbIcon" />{{ $t(v.meta.title) }}
+						<SvgIcon :icon-class="v.meta.icon" class="layout-navbars-breadcrumb-iconfont" v-if="themeConfig.isBreadcrumbIcon" />{{ $t(v.meta.title) }}
 					</a>
 				</el-breadcrumb-item>
 			</transition-group>
@@ -26,11 +21,10 @@
 <script setup lang="ts" name="layoutBreadcrumb">
 import { reactive, computed, onMounted } from 'vue';
 import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
-import { Local } from '/@/utils/storage';
-import other from '/@/utils/other';
 import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import { useRoutesList } from '/@/stores/routesList';
+import hamburger from "./hamburger.vue"
 
 // 定义变量内容
 const stores = useRoutesList();
@@ -58,16 +52,6 @@ const onBreadcrumbClick = (v: RouteItem) => {
 	const { redirect, path } = v;
 	if (redirect) router.push(redirect);
 	else router.push(path);
-};
-// 展开/收起左侧菜单点击
-const onThemeConfigChange = () => {
-	themeConfig.value.isCollapse = !themeConfig.value.isCollapse;
-	setLocalThemeConfig();
-};
-// 存储布局配置
-const setLocalThemeConfig = () => {
-	Local.remove('themeConfig');
-	Local.set('themeConfig', themeConfig.value);
 };
 // 处理面包屑数据
 const getBreadcrumbList = (arr: RouteItems) => {

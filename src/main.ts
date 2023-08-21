@@ -7,10 +7,11 @@ import { i18n } from '/@/i18n/index';
 import other from '/@/utils/other';
 
 import ElementPlus from 'element-plus';
+import 'virtual:svg-icons-register'
 import '/@/theme/index.scss';
 import VueGridLayout from 'vue-grid-layout';
 
-import plugins from './plugins' // plugins
+import plugins from './plugins/index.js' // plugins
 
 import './permission.js' // permission control
 
